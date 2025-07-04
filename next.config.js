@@ -4,9 +4,6 @@ const nextConfig = {
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
   distDir: 'out',
-  experimental: {
-    appDir: true,
-  },
   images: {
     unoptimized: true,
     domains: ['localhost'],
