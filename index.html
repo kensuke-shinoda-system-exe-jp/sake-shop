@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍶 酒屋 - お酒とおつまみの通販サイト</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#fef7ee',
+                            100: '#fdedd6',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                        },
+                        secondary: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .btn-primary {
+            @apply bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors;
+        }
+        .btn-secondary {
+            @apply bg-secondary-100 hover:bg-secondary-200 text-secondary-700 font-medium py-2 px-4 rounded-lg transition-colors;
+        }
+        .card {
+            @apply bg-white rounded-lg shadow-md p-6;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <div id="app">
+        <div class="container mx-auto px-4 py-8">
+            <!-- ヘッダー -->
+            <header class="bg-white shadow-sm rounded-lg mb-8">
+                <div class="flex items-center justify-between p-6">
+                    <h1 class="text-3xl font-bold text-primary-600">🍶 酒屋</h1>
+                    <nav class="flex space-x-6">
+                        <a href="#" onclick="showPage('home')" class="text-secondary-600 hover:text-primary-600 transition-colors">ホーム</a>
+                        <a href="#" onclick="showPage('products')" class="text-secondary-600 hover:text-primary-600 transition-colors">商品一覧</a>
+                        <a href="#" onclick="showPage('diagnosis')" class="text-secondary-600 hover:text-primary-600 transition-colors">お酒診断</a>
+                        <a href="#" onclick="showPage('random')" class="text-secondary-600 hover:text-primary-600 transition-colors">ランダム提案</a>
+                        <a href="#" onclick="showPage('cart')" class="text-secondary-600 hover:text-primary-600 transition-colors">カート (<span id="cart-count">0</span>)</a>
+                        <a href="#" onclick="showPage('admin')" class="text-secondary-600 hover:text-primary-600 transition-colors">管理者</a>
+                    </nav>
+                </div>
+            </header>
+
+            <!-- メインコンテンツ -->
+            <main id="main-content">
+                <!-- ホームページ -->
+                <div id="home-page">
+                    <!-- ヒーローセクション -->
+                    <section class="card mb-12 text-center">
+                        <h2 class="text-4xl font-bold text-secondary-700 mb-4">
+                            お酒とおつまみの専門店
+                        </h2>
+                        <p class="text-lg text-secondary-600 mb-8">
+                            厳選されたお酒とおつまみをお届けします。お酒診断でぴったりの一本を見つけよう！
+                        </p>
+                        <div class="flex justify-center space-x-4">
+                            <button onclick="showPage('products')" class="bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                                商品を見る
+                            </button>
+                            <button onclick="showPage('diagnosis')" class="bg-secondary-100 hover:bg-secondary-200 text-secondary-700 font-medium py-2 px-4 rounded-lg transition-colors">
+                                お酒診断を始める
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- 特徴セクション -->
+                    <section class="grid md:grid-cols-3 gap-8 mb-12">
+                        <div class="card text-center">
+                            <div class="text-4xl mb-4">🍶</div>
+                            <h3 class="text-xl font-semibold text-secondary-700 mb-2">厳選されたお酒</h3>
+                            <p class="text-secondary-600">
+                                日本酒、焼酎、ワイン、ビールなど、厳選されたお酒を取り揃えています。
+                            </p>
+                        </div>
+                        <div class="card text-center">
+                            <div class="text-4xl mb-4">🥜</div>
+                            <h3 class="text-xl font-semibold text-secondary-700 mb-2">こだわりのおつまみ</h3>
+                            <p class="text-secondary-600">
+                                お酒に合う美味しいおつまみを豊富に取り揃えています。
+                            </p>
+                        </div>
+                        <div class="card text-center">
+                            <div class="text-4xl mb-4">🎯</div>
+                            <h3 class="text-xl font-semibold text-secondary-700 mb-2">お酒診断</h3>
+                            <p class="text-secondary-600">
+                                あなたの好みに合ったお酒を診断機能で見つけることができます。
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- おすすめ商品セクション -->
+                    <section class="card">
+                        <h3 class="text-2xl font-bold text-secondary-700 mb-6">おすすめ商品</h3>
+                        <div class="grid md:grid-cols-4 gap-6" id="featured-products">
+                            <!-- 商品は JavaScript で動的に生成 -->
+                        </div>
+                    </section>
+                </div>
+
+                <!-- 商品一覧ページ -->
+                <div id="products-page" class="hidden">
+                    <div class="flex flex-col lg:flex-row gap-8">
+                        <!-- サイドバー -->
+                        <aside class="lg:w-1/4">
+                            <div class="card">
+                                <h3 class="text-lg font-semibold text-secondary-700 mb-4">検索・絞り込み</h3>
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium text-secondary-700 mb-2">商品検索</label>
+                                    <input type="text" id="search-input" placeholder="商品名で検索" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                           onkeyup="filterProducts()">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-secondary-700 mb-2">カテゴリー</label>
+                                    <div class="space-y-2" id="category-filters">
+                                        <!-- カテゴリーボタンは JavaScript で生成 -->
+                                    </div>
+                                </div>
+                            </div>
+                        </aside>
+
+                        <!-- メインコンテンツ -->
+                        <main class="lg:w-3/4">
+                            <div class="mb-6">
+                                <h1 class="text-2xl font-bold text-secondary-700 mb-2">商品一覧</h1>
+                                <p class="text-secondary-600" id="product-count">商品を読み込み中...</p>
+                            </div>
+                            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid">
+                                <!-- 商品は JavaScript で動的に生成 -->
+                            </div>
+                        </main>
+                    </div>
+                </div>
+
+                <!-- カートページ -->
+                <div id="cart-page" class="hidden">
+                    <h1 class="text-3xl font-bold text-secondary-700 mb-8">🛒 ショッピングカート</h1>
+                    <div id="cart-content">
+                        <!-- カート内容は JavaScript で動的に生成 -->
+                    </div>
+                </div>
+
+                <!-- お酒診断ページ -->
+                <div id="diagnosis-page" class="hidden">
+                    <div class="max-w-2xl mx-auto">
+                        <div class="card">
+                            <h1 class="text-2xl font-bold text-secondary-700 mb-4">🎯 お酒診断</h1>
+                            <p class="text-secondary-600 mb-6">
+                                いくつかの質問にお答えいただくと、あなたにぴったりのお酒をおすすめします！
+                            </p>
+                            <div id="diagnosis-content">
+                                <button onclick="startDiagnosis()" class="bg-primary-500 hover:bg-primary-600 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+                                    診断を開始する
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ランダム提案ページ -->
+                <div id="random-page" class="hidden">
+                    <div class="max-w-4xl mx-auto">
+                        <div class="text-center mb-8">
+                            <h1 class="text-3xl font-bold text-secondary-700 mb-4">🎲 ランダム提案</h1>
+                            <p class="text-lg text-secondary-600 mb-6">
+                                運命の一本を見つけよう！ボタンを押してランダムにお酒やおつまみを提案します。
+                            </p>
+                            <button onclick="getRandomProduct()" class="bg-primary-500 hover:bg-primary-600 text-white font-medium py-3 px-8 rounded-lg transition-colors">
+                                🎯 ランダムに選ぶ
+                            </button>
+                        </div>
+                        <div id="random-result" class="hidden">
+                            <!-- ランダム結果は JavaScript で動的に生成 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 管理者ページ -->
+                <div id="admin-page" class="hidden">
+                    <div class="max-w-md mx-auto">
+                        <div class="card">
+                            <h1 class="text-2xl font-bold text-secondary-700 mb-4">管理者ログイン</h1>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-secondary-700 mb-2">メールアドレス</label>
+                                    <input type="email" id="admin-email" value="admin@sake-shop.com" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-secondary-700 mb-2">パスワード</label>
+                                    <input type="password" id="admin-password" value="admin123"
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                </div>
+                                <button onclick="adminLogin()" class="w-full bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                                    ログイン
+                                </button>
+                            </div>
+                            <div class="mt-4 bg-gray-50 rounded-md p-4">
+                                <p class="text-sm text-secondary-600">
+                                    <strong>デモ用ログイン情報:</strong><br>
+                                    メール: admin@sake-shop.com<br>
+                                    パスワード: admin123
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- フッター -->
+            <footer class="mt-16 text-center text-secondary-500">
+                <p>&copy; 2024 酒屋. All rights reserved.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // サンプル商品データ
+        const products = [
+            {
+                id: 1,
+                name: '純米大吟醸 山田錦',
+                category: 'sake',
+                price: 3500,
+                description: '山田錦を使用した上品な味わいの純米大吟醸酒',
+                alcoholPercent: 15.5,
+                tags: ['日本酒', '純米大吟醸', '山田錦']
+            },
+            {
+                id: 2,
+                name: '本格焼酎 黒霧島',
+                category: 'shochu',
+                price: 1200,
+                description: 'さつまいもの甘みが感じられる本格焼酎',
+                alcoholPercent: 25,
+                tags: ['焼酎', 'さつまいも', '本格']
+            },
+            {
+                id: 3,
+                name: 'シャルドネ 白ワイン',
+                category: 'wine',
+                price: 2800,
+                description: 'フルーティーで爽やかな白ワイン',
+                alcoholPercent: 12,
+                tags: ['ワイン', '白ワイン', 'シャルドネ']
+            },
+            {
+                id: 4,
+                name: 'クラフトビール IPA',
+                category: 'beer',
+                price: 450,
+                description: 'ホップの苦味が効いたクラフトビール',
+                alcoholPercent: 6.5,
+                tags: ['ビール', 'クラフト', 'IPA']
+            },
+            {
+                id: 5,
+                name: 'チーズ盛り合わせ',
+                category: 'snack',
+                price: 1800,
+                description: '3種類のチーズの盛り合わせ',
+                alcoholPercent: 0,
+                tags: ['おつまみ', 'チーズ', '盛り合わせ']
+            },
+            {
+                id: 6,
+                name: 'ナッツミックス',
+                category: 'snack',
+                price: 680,
+                description: '4種類のナッツをミックスした人気のおつまみ',
+                alcoholPercent: 0,
+                tags: ['おつまみ', 'ナッツ', 'ミックス']
+            }
+        ];
+
+        const categories = [
+            { id: 'all', name: 'すべて' },
+            { id: 'sake', name: '日本酒' },
+            { id: 'shochu', name: '焼酎' },
+            { id: 'wine', name: 'ワイン' },
+            { id: 'beer', name: 'ビール' },
+            { id: 'snack', name: 'おつまみ' }
+        ];
+
+        let cart = [];
+        let currentCategory = 'all';
+
+        // ページ表示制御
+        function showPage(pageId) {
+            const pages = ['home', 'products', 'cart', 'diagnosis', 'random', 'admin'];
+            pages.forEach(page => {
+                const element = document.getElementById(page + '-page');
+                if (element) {
+                    element.classList.add('hidden');
+                }
+            });
+            
+            const targetPage = document.getElementById(pageId + '-page');
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+            }
+
+            if (pageId === 'products') {
+                loadProducts();
+            } else if (pageId === 'cart') {
+                loadCart();
+            }
+        }
+
+        // 商品表示
+        function loadProducts() {
+            const grid = document.getElementById('products-grid');
+            const countElement = document.getElementById('product-count');
+            
+            const filteredProducts = filterProductsByCategory();
+            countElement.textContent = `${filteredProducts.length}件の商品が見つかりました`;
+            
+            grid.innerHTML = filteredProducts.map(product => `
+                <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+                    <div class="bg-gray-200 h-48 rounded-lg mb-4 flex items-center justify-center">
+                        <span class="text-gray-500">商品画像</span>
+                    </div>
+                    <h3 class="font-semibold text-secondary-700 mb-2">${product.name}</h3>
+                    <p class="text-secondary-600 text-sm mb-3">${product.description}</p>
+                    <div class="flex flex-wrap gap-1 mb-3">
+                        ${product.tags.map(tag => `<span class="px-2 py-1 bg-primary-100 text-primary-700 text-xs rounded-full">${tag}</span>`).join('')}
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-primary-600 font-bold text-lg">¥${product.price.toLocaleString()}</p>
+                            ${product.alcoholPercent > 0 ? `<p class="text-secondary-500 text-sm">アルコール度数: ${product.alcoholPercent}%</p>` : ''}
+                        </div>
+                        <button onclick="addToCart(${product.id})" class="bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                            カートに追加
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            // カテゴリーフィルター
+            const categoryFilters = document.getElementById('category-filters');
+            categoryFilters.innerHTML = categories.map(category => `
+                <button onclick="setCategory('${category.id}')" 
+                        class="w-full text-left px-3 py-2 rounded-lg transition-colors ${currentCategory === category.id ? 'bg-primary-100 text-primary-700 font-medium' : 'text-secondary-600 hover:bg-gray-100'}">
+                    ${category.name}
+                </button>
+            `).join('');
+        }
+
+        function filterProductsByCategory() {
+            return products.filter(product => 
+                currentCategory === 'all' || product.category === currentCategory
+            );
+        }
+
+        function setCategory(categoryId) {
+            currentCategory = categoryId;
+            loadProducts();
+        }
+
+        function filterProducts() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const grid = document.getElementById('products-grid');
+            const countElement = document.getElementById('product-count');
+            
+            const filteredProducts = products.filter(product => {
+                const matchesCategory = currentCategory === 'all' || product.category === currentCategory;
+                const matchesSearch = product.name.toLowerCase().includes(searchTerm) ||
+                                   product.description.toLowerCase().includes(searchTerm) ||
+                                   product.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+                return matchesCategory && matchesSearch;
+            });
+
+            countElement.textContent = `${filteredProducts.length}件の商品が見つかりました`;
+            
+            grid.innerHTML = filteredProducts.map(product => `
+                <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+                    <div class="bg-gray-200 h-48 rounded-lg mb-4 flex items-center justify-center">
+                        <span class="text-gray-500">商品画像</span>
+                    </div>
+                    <h3 class="font-semibold text-secondary-700 mb-2">${product.name}</h3>
+                    <p class="text-secondary-600 text-sm mb-3">${product.description}</p>
+                    <div class="flex flex-wrap gap-1 mb-3">
+                        ${product.tags.map(tag => `<span class="px-2 py-1 bg-primary-100 text-primary-700 text-xs rounded-full">${tag}</span>`).join('')}
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-primary-600 font-bold text-lg">¥${product.price.toLocaleString()}</p>
+                            ${product.alcoholPercent > 0 ? `<p class="text-secondary-500 text-sm">アルコール度数: ${product.alcoholPercent}%</p>` : ''}
+                        </div>
+                        <button onclick="addToCart(${product.id})" class="bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                            カートに追加
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // カート機能
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            
+            updateCartCount();
+            alert('カートに追加しました！');
+        }
+
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = count;
+        }
+
+        function loadCart() {
+            const cartContent = document.getElementById('cart-content');
+            
+            if (cart.length === 0) {
+                cartContent.innerHTML = `
+                    <div class="bg-white rounded-lg shadow-md p-12 text-center">
+                        <div class="text-6xl mb-4">🛒</div>
+                        <h3 class="text-xl font-semibold text-secondary-700 mb-2">カートは空です</h3>
+                        <p class="text-secondary-600 mb-6">商品を追加してお買い物を始めましょう！</p>
+                        <button onclick="showPage('products')" class="bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                            商品一覧を見る
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            cartContent.innerHTML = `
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2">
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h2 class="text-xl font-semibold text-secondary-700 mb-6">カート内商品 (${cart.reduce((total, item) => total + item.quantity, 0)}点)</h2>
+                            <div class="space-y-4">
+                                ${cart.map(item => `
+                                    <div class="flex items-center p-4 border border-gray-200 rounded-lg">
+                                        <div class="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center mr-4">
+                                            <span class="text-2xl">📦</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h3 class="font-semibold text-secondary-700 mb-1">${item.name}</h3>
+                                            <p class="text-primary-600 font-bold">¥${item.price.toLocaleString()}</p>
+                                        </div>
+                                        <div class="flex items-center space-x-3">
+                                            <button onclick="updateQuantity(${item.id}, ${item.quantity - 1})" class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors">-</button>
+                                            <span class="w-8 text-center font-medium">${item.quantity}</span>
+                                            <button onclick="updateQuantity(${item.id}, ${item.quantity + 1})" class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors">+</button>
+                                        </div>
+                                        <div class="ml-6 text-right">
+                                            <p class="font-bold text-secondary-700 mb-2">¥${(item.price * item.quantity).toLocaleString()}</p>
+                                            <button onclick="removeFromCart(${item.id})" class="text-red-600 hover:text-red-700 text-sm transition-colors">削除</button>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-1">
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h2 class="text-xl font-semibold text-secondary-700 mb-6">注文サマリー</h2>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex justify-between">
+                                    <span class="text-secondary-600">商品合計</span>
+                                    <span class="font-medium">¥${total.toLocaleString()}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-secondary-600">送料</span>
+                                    <span class="font-medium">¥500</span>
+                                </div>
+                                <div class="border-t pt-3">
+                                    <div class="flex justify-between text-lg font-bold">
+                                        <span>合計</span>
+                                        <span class="text-primary-600">¥${(total + 500).toLocaleString()}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onclick="checkout()" class="w-full bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors mb-4">
+                                レジに進む
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateQuantity(productId, newQuantity) {
+            if (newQuantity <= 0) {
+                removeFromCart(productId);
+                return;
+            }
+            
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity = newQuantity;
+                updateCartCount();
+                loadCart();
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartCount();
+            loadCart();
+        }
+
+        function checkout() {
+            alert('注文が完了しました！（デモ版）');
+            cart = [];
+            updateCartCount();
+            loadCart();
+        }
+
+        // ランダム提案
+        function getRandomProduct() {
+            const randomIndex = Math.floor(Math.random() * products.length);
+            const product = products[randomIndex];
+            
+            document.getElementById('random-result').innerHTML = `
+                <div class="bg-white rounded-lg shadow-md p-8">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="flex flex-col items-center">
+                            <div class="bg-gray-200 w-full h-64 rounded-lg mb-4 flex items-center justify-center">
+                                <span class="text-gray-500">商品画像</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-center">
+                            <h2 class="text-2xl font-bold text-secondary-700 mb-4">${product.name}</h2>
+                            <p class="text-secondary-600 mb-4">${product.description}</p>
+                            ${product.alcoholPercent > 0 ? `<p class="text-secondary-500 mb-4">アルコール度数: ${product.alcoholPercent}%</p>` : ''}
+                            <div class="flex items-center justify-between">
+                                <div class="text-2xl font-bold text-primary-600">¥${product.price.toLocaleString()}</div>
+                                <button onclick="addToCart(${product.id})" class="bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                                    カートに追加
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('random-result').classList.remove('hidden');
+        }
+
+        // お酒診断
+        function startDiagnosis() {
+            const questions = [
+                {
+                    question: 'どのような味がお好みですか？',
+                    options: ['甘い', '辛口', '苦い', '酸っぱい']
+                },
+                {
+                    question: 'アルコール度数の好みは？',
+                    options: ['低め（5-10%）', '普通（10-15%）', '高め（15-25%）', '強め（25%以上）']
+                },
+                {
+                    question: '飲むシーンは？',
+                    options: ['食事と一緒に', '一人でゆっくり', '友人と楽しく', '特別な日に']
+                }
+            ];
+
+            let currentQuestion = 0;
+            let answers = [];
+
+            function showQuestion() {
+                const content = document.getElementById('diagnosis-content');
+                const question = questions[currentQuestion];
+                
+                content.innerHTML = `
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-sm text-secondary-500">質問 ${currentQuestion + 1} / ${questions.length}</span>
+                            <div class="w-full bg-gray-200 rounded-full h-2 ml-4">
+                                <div class="bg-primary-500 h-2 rounded-full transition-all duration-300" style="width: ${((currentQuestion + 1) / questions.length) * 100}%"></div>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-semibold text-secondary-700 mb-6">${question.question}</h3>
+                        <div class="space-y-3">
+                            ${question.options.map((option, index) => `
+                                <button onclick="selectAnswer(${index})" class="w-full text-left p-4 border border-gray-300 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition-colors">
+                                    ${option}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            window.selectAnswer = function(answerIndex) {
+                answers.push(answerIndex);
+                currentQuestion++;
+                
+                if (currentQuestion < questions.length) {
+                    showQuestion();
+                } else {
+                    showResult();
+                }
+            };
+
+            function showResult() {
+                // 簡単な診断ロジック
+                let recommendedProduct;
+                if (answers[0] === 0) { // 甘い
+                    recommendedProduct = products.find(p => p.category === 'wine');
+                } else if (answers[0] === 1) { // 辛口
+                    recommendedProduct = products.find(p => p.category === 'sake');
+                } else if (answers[0] === 2) { // 苦い
+                    recommendedProduct = products.find(p => p.category === 'beer');
+                } else { // 酸っぱい
+                    recommendedProduct = products.find(p => p.category === 'shochu');
+                }
+
+                const content = document.getElementById('diagnosis-content');
+                content.innerHTML = `
+                    <div class="text-center mb-8">
+                        <div class="text-6xl mb-4">🎯</div>
+                        <h3 class="text-2xl font-bold text-secondary-700 mb-4">診断結果</h3>
+                        <p class="text-lg text-secondary-600 mb-8">あなたにおすすめのお酒はこちらです！</p>
+                    </div>
+                    <div class="bg-primary-50 rounded-lg p-6 mb-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-gray-200 h-48 rounded-lg flex items-center justify-center">
+                                <span class="text-gray-500">商品画像</span>
+                            </div>
+                            <div class="flex flex-col justify-center">
+                                <h4 class="text-xl font-bold text-secondary-700 mb-2">${recommendedProduct.name}</h4>
+                                <p class="text-secondary-600 mb-4">${recommendedProduct.description}</p>
+                                <div class="flex items-center justify-between">
+                                    <div class="text-xl font-bold text-primary-600">¥${recommendedProduct.price.toLocaleString()}</div>
+                                    <button onclick="addToCart(${recommendedProduct.id})" class="bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                                        カートに追加
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button onclick="startDiagnosis()" class="bg-secondary-100 hover:bg-secondary-200 text-secondary-700 font-medium py-2 px-4 rounded-lg transition-colors mr-4">
+                            もう一度診断する
+                        </button>
+                        <button onclick="showPage('products')" class="bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                            他の商品も見る
+                        </button>
+                    </div>
+                `;
+            }
+
+            showQuestion();
+        }
+
+        // 管理者ログイン
+        function adminLogin() {
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            
+            if (email === 'admin@sake-shop.com' && password === 'admin123') {
+                showAdminDashboard();
+            } else {
+                alert('ログイン情報が正しくありません。');
+            }
+        }
+
+        function showAdminDashboard() {
+            const adminPage = document.getElementById('admin-page');
+            adminPage.innerHTML = `
+                <div class="max-w-6xl mx-auto">
+                    <div class="flex items-center justify-between mb-8">
+                        <h1 class="text-3xl font-bold text-secondary-700">管理者ダッシュボード</h1>
+                        <button onclick="showPage('home')" class="bg-secondary-100 hover:bg-secondary-200 text-secondary-700 font-medium py-2 px-4 rounded-lg transition-colors">
+                            ログアウト
+                        </button>
+                    </div>
+                    
+                    <!-- 統計カード -->
+                    <div class="grid md:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <div class="flex items-center">
+                                <div class="text-3xl mr-4">📦</div>
+                                <div>
+                                    <p class="text-secondary-600 text-sm">総商品数</p>
+                                    <p class="text-2xl font-bold text-secondary-700">${products.length}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <div class="flex items-center">
+                                <div class="text-3xl mr-4">🛒</div>
+                                <div>
+                                    <p class="text-secondary-600 text-sm">カート内商品</p>
+                                    <p class="text-2xl font-bold text-secondary-700">${cart.reduce((total, item) => total + item.quantity, 0)}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <div class="flex items-center">
+                                <div class="text-3xl mr-4">💰</div>
+                                <div>
+                                    <p class="text-secondary-600 text-sm">売上予想</p>
+                                    <p class="text-2xl font-bold text-secondary-700">¥${Math.floor(Math.random() * 100000).toLocaleString()}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <div class="flex items-center">
+                                <div class="text-3xl mr-4">👥</div>
+                                <div>
+                                    <p class="text-secondary-600 text-sm">アクティブユーザー</p>
+                                    <p class="text-2xl font-bold text-secondary-700">${Math.floor(Math.random() * 50) + 10}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 商品管理 -->
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h2 class="text-xl font-semibold text-secondary-700 mb-6">商品管理</h2>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="border-b">
+                                        <th class="text-left py-3 px-4">商品名</th>
+                                        <th class="text-left py-3 px-4">カテゴリー</th>
+                                        <th class="text-left py-3 px-4">価格</th>
+                                        <th class="text-left py-3 px-4">在庫状況</th>
+                                        <th class="text-left py-3 px-4">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${products.map(product => `
+                                        <tr class="border-b hover:bg-gray-50">
+                                            <td class="py-3 px-4 font-medium">${product.name}</td>
+                                            <td class="py-3 px-4">${categories.find(c => c.id === product.category)?.name || product.category}</td>
+                                            <td class="py-3 px-4">¥${product.price.toLocaleString()}</td>
+                                            <td class="py-3 px-4">
+                                                <span class="px-2 py-1 bg-green-100 text-green-700 text-sm rounded-full">在庫あり</span>
+                                            </td>
+                                            <td class="py-3 px-4">
+                                                <button class="text-primary-600 hover:text-primary-700 text-sm mr-3">編集</button>
+                                                <button class="text-red-600 hover:text-red-700 text-sm">削除</button>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            // おすすめ商品を表示
+            const featuredProducts = document.getElementById('featured-products');
+            const featured = products.slice(0, 4);
+            featuredProducts.innerHTML = featured.map(product => `
+                <div class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
+                    <div class="bg-gray-200 h-32 rounded-lg mb-3 flex items-center justify-center">
+                        <span class="text-gray-500 text-sm">商品画像</span>
+                    </div>
+                    <h4 class="font-semibold text-secondary-700 mb-2 text-sm">${product.name}</h4>
+                    <p class="text-primary-600 font-bold mb-3">¥${product.price.toLocaleString()}</p>
+                    <button onclick="addToCart(${product.id})" class="w-full bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 px-3 rounded-lg transition-colors text-sm">
+                        カートに追加
+                    </button>
+                </div>
+            `).join('');
+            
+            updateCartCount();
+        });
+    </script>
+</body>
+</html>
