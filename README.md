@@ -1,198 +1,202 @@
 # 🍶 酒屋 - お酒とおつまみの通販サイト
 
-Next.jsで構築されたAmazon風の通販サイトです。お酒とおつまみを販売し、お酒診断機能やランダム提案機能を備えています。
+Next.jsで構築された日本酒とおつまみの通販サイトです。GitHub Pagesで自動デプロイされます。
 
-## 🚀 機能
+## 🚀 デプロイ状況
 
-### ユーザー向け機能
-- **商品一覧・検索・絞り込み** - カテゴリー別の商品表示と検索機能
-- **商品詳細表示** - 商品の詳細情報とスペック表示
-- **ショッピングカート** - 商品の追加・削除・数量変更
-- **お酒診断** - 質問に答えてユーザーの好みに合うお酒を提案
-- **ランダム提案** - ワンクリックでランダムに商品を提案
-- **レスポンシブデザイン** - モバイル・タブレット・デスクトップ対応
+このプロジェクトはGitHub ActionsとGitHub Pagesを使用して自動デプロイされます。
 
-### 管理者向け機能
-- **管理者認証** - セキュアなログイン機能
-- **ダッシュボード** - 売上・注文・在庫の統計表示
-- **商品管理** - 商品の追加・編集・削除
-- **注文管理** - 注文の確認・ステータス更新
+### デプロイURL
+- **本番サイト**: `https://YOUR_USERNAME.github.io/sake-shop/`
+- **リポジトリ**: `https://github.com/YOUR_USERNAME/sake-shop`
+
+## 📋 機能
+
+- 🍶 日本酒商品一覧・詳細表示
+- 🥜 おつまみ商品一覧・詳細表示
+- 🛒 ショッピングカート機能
+- 🎯 お酒診断機能
+- 🎲 ランダム商品表示
+- 👨‍💼 管理者ダッシュボード
+- 📱 レスポンシブデザイン
 
 ## 🛠️ 技術スタック
 
 - **フレームワーク**: Next.js 14 (App Router)
 - **言語**: TypeScript
 - **スタイリング**: Tailwind CSS
-- **UI**: React Hooks
-- **データベース**: IndexedDB (ブラウザ内データベース)
-- **認証**: localStorage (デモ用)
+- **データベース**: IndexedDB (ブラウザ内)
+- **デプロイ**: GitHub Pages + GitHub Actions
 
-## 📁 プロジェクト構造
+## 🏗️ プロジェクト構造
 
 ```
 sake-shop/
 ├── src/
-│   ├── app/
-│   │   ├── globals.css          # グローバルスタイル
-│   │   ├── layout.tsx           # ルートレイアウト
-│   │   ├── page.tsx             # トップページ
-│   │   ├── products/            # 商品一覧ページ
-│   │   ├── diagnosis/           # お酒診断ページ
-│   │   ├── random/              # ランダム提案ページ
-│   │   ├── cart/                # ショッピングカートページ
-│   │   └── admin/               # 管理者機能
-│   │       ├── page.tsx         # 管理者ログイン
-│   │       └── dashboard/       # 管理者ダッシュボード
+│   ├── app/                 # Next.js App Router
+│   │   ├── page.tsx        # ホームページ
+│   │   ├── products/       # 商品一覧
+│   │   ├── cart/           # カート
+│   │   ├── diagnosis/      # お酒診断
+│   │   ├── random/         # ランダム商品
+│   │   └── admin/          # 管理者機能
 │   └── lib/
-│       └── indexedDB.ts         # IndexedDBユーティリティ
-├── package.json
-├── next.config.js
-├── tailwind.config.ts
-├── tsconfig.json
-└── postcss.config.js
+│       └── indexedDB.ts    # データベース操作
+├── public/                 # 静的ファイル
+├── .github/
+│   └── workflows/
+│       └── deploy.yml      # GitHub Actions設定
+└── next.config.js          # Next.js設定
 ```
 
-## 🎯 主要ページ
+## 🚀 デプロイ手順
 
-### ユーザー向け
-- `/` - トップページ
-- `/products` - 商品一覧
-- `/diagnosis` - お酒診断
-- `/random` - ランダム提案
-- `/cart` - ショッピングカート
+### 1. GitHubリポジトリの作成
 
-### 管理者向け
-- `/admin` - 管理者ログイン
-- `/admin/dashboard` - 管理者ダッシュボード
+1. [GitHub](https://github.com/new)で新しいリポジトリを作成
+2. Repository name: `sake-shop`
+3. Description: `🍶 酒屋 - お酒とおつまみの通販サイト (Next.js)`
+4. **Public**を選択（GitHub Pages無料プランはPublicのみ）
+5. "Create repository"をクリック
 
-## 🔐 管理者ログイン情報（デモ用）
+### 2. ローカルリポジトリの設定
 
+```bash
+# リモートリポジトリを追加
+git remote add origin https://github.com/YOUR_USERNAME/sake-shop.git
+
+# メインブランチに設定
+git branch -M main
+
+# コードをプッシュ
+git push -u origin main
 ```
-メールアドレス: admin@sake-shop.com
-パスワード: admin123
-```
 
-## 🎨 デザインシステム
+### 3. GitHub Pagesの有効化
 
-### カラーパレット
-- **プライマリ**: オレンジ系（#f97316）
-- **セカンダリ**: グレー系（#64748b）
-- **背景**: ライトグレー（#f8fafc）
+1. GitHubリポジトリの**Settings**タブをクリック
+2. 左サイドバーの**Pages**をクリック
+3. **Source**で**GitHub Actions**を選択
+4. **Save**をクリック
 
-### コンポーネント
-- **btn-primary**: プライマリボタン
-- **btn-secondary**: セカンダリボタン
-- **card**: カードコンポーネント
+### 4. 自動デプロイの確認
 
-## 🚀 開発・実行方法
+- コードをプッシュすると、GitHub Actionsが自動実行されます
+- **Actions**タブでビルド・デプロイの進行状況を確認
+- 完了後、`https://YOUR_USERNAME.github.io/sake-shop/`でアクセス可能
+
+## 🔧 ローカル開発
 
 ### 前提条件
+
 - Node.js 18以上
 - npm または yarn
 
 ### セットアップ
 
-1. **依存関係のインストール**
 ```bash
-cd sake-shop
+# 依存関係のインストール
 npm install
-```
 
-2. **開発サーバーの起動**
-```bash
+# 開発サーバーの起動
 npm run dev
 ```
 
-3. **ブラウザでアクセス**
-```
-http://localhost:3000
-```
+ブラウザで [http://localhost:3000](http://localhost:3000) を開いてください。
 
-### ビルド・本番環境
+### ビルド
 
 ```bash
 # 本番用ビルド
 npm run build
 
-# 本番サーバー起動
-npm start
-
-# GitHub Pages用静的エクスポート
+# 静的ファイルの生成
 npm run export
 ```
 
-## 🌐 GitHub Pagesデプロイ
+## 📁 設定ファイル
 
-このプロジェクトはGitHub Actionsを使用してGitHub Pagesに自動デプロイされます。
+### GitHub Actions (`.github/workflows/deploy.yml`)
 
-### デプロイ手順
+```yaml
+name: Deploy to GitHub Pages
 
-1. **GitHubリポジトリの作成**
-   - GitHubで新しいリポジトリを作成
-   - リポジトリ名は `sake-shop` を推奨
+on:
+  push:
+    branches: [ main, master ]
 
-2. **コードのプッシュ**
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/sake-shop.git
-   git push -u origin main
-   ```
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+        env:
+          NODE_ENV: production
+      - uses: actions/configure-pages@v4
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+      - uses: actions/deploy-pages@v4
+```
 
-3. **GitHub Pages設定**
-   - リポジトリの Settings → Pages に移動
-   - Source を "GitHub Actions" に設定
+### Next.js設定 (`next.config.js`)
 
-4. **自動デプロイ**
-   - `main`ブランチにプッシュすると自動的にデプロイが開始
-   - Actions タブでデプロイ状況を確認可能
-   - デプロイ完了後、`https://YOUR_USERNAME.github.io/sake-shop/` でアクセス可能
+```javascript
+const nextConfig = {
+  output: 'export',
+  trailingSlash: true,
+  skipTrailingSlashRedirect: true,
+  distDir: 'dist',
+  images: {
+    unoptimized: true,
+  },
+  basePath: process.env.NODE_ENV === 'production' ? '/sake-shop' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/sake-shop/' : '',
+}
+```
 
-### デプロイ設定ファイル
+## 🐛 トラブルシューティング
 
-- `.github/workflows/deploy.yml` - GitHub Actionsワークフロー
-- `next.config.js` - GitHub Pages用の設定
-- `public/.nojekyll` - Jekyll無効化ファイル
+### ビルドエラー
 
-## 📱 レスポンシブ対応
+```bash
+# キャッシュをクリア
+npm cache clean --force
 
-- **モバイル**: 320px〜768px
-- **タブレット**: 768px〜1024px
-- **デスクトップ**: 1024px以上
+# node_modulesを再インストール
+rm -rf node_modules package-lock.json
+npm install
+```
 
-## 🔧 カスタマイズ
+### デプロイ後にページが表示されない
 
-### 商品データの変更
-各ページの`sampleProducts`配列を編集することで商品データを変更できます。
+1. GitHub Pages設定で**GitHub Actions**が選択されているか確認
+2. **Actions**タブでワークフローが正常完了しているか確認
+3. ブラウザのキャッシュをクリア
 
-### スタイルの変更
-`tailwind.config.ts`でカラーパレットやテーマを変更できます。
+### 画像が表示されない
 
-### 診断ロジックの変更
-`src/app/diagnosis/page.tsx`の`questions`配列と`calculateResult`関数を編集できます。
+- `next.config.js`で`images.unoptimized: true`が設定されているか確認
+- 画像パスが正しいか確認
 
-## 🚧 今後の拡張予定
-
-- [ ] 実際のデータベース連携
-- [ ] 決済機能の実装
-- [ ] ユーザー認証・会員機能
-- [ ] 商品レビュー機能
-- [ ] 在庫管理システム
-- [ ] メール通知機能
-- [ ] SEO最適化
-
-## 📄 ライセンス
+## 📝 ライセンス
 
 このプロジェクトはMITライセンスの下で公開されています。
 
 ## 🤝 コントリビューション
 
-プルリクエストやイシューの報告を歓迎します。
+プルリクエストやイシューの報告を歓迎します！
 
 ---
 
-**開発者**: Roo  
-**作成日**: 2024年1月  
-**バージョン**: 1.0.0
+**🍶 乾杯！美味しいお酒とおつまみをお楽しみください！**
